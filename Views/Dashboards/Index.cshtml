@@ -1,0 +1,63 @@
+﻿@model IEnumerable<Student_Attendance_System.Models.Dashboard>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Attendance Records</h1>
+
+<p>
+    <a asp-action="Create">Add New Attendee</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.SelectStudent)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SelectCourses)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                <text>Attendance</text>
+                @*@Html.DisplayNameFor(model => model.isPresent)*@
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.SelectStudent)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SelectCourses)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+               @* @Html.DisplayFor(modelItem => item.isPresent)*@
+               @if(item.isPresent)
+               {
+                   <text>Present</text>
+               }
+               else
+               {
+                   <text>Absent</text>
+               }
+            </td>
+           @* <td>
+                <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.id">Delete</a>
+            </td>*@
+        </tr>
+}
+    </tbody>
+</table>

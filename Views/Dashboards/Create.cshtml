@@ -1,0 +1,60 @@
+﻿@model Student_Attendance_System.Models.Dashboard
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var ErrorMsg = ViewBag.ErrorMsg as string;
+}
+
+<h1>Add New Attendance Record</h1>
+
+<h4>Dashboard</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            @*<div class="form-group">
+                <label>Select Student:</label>
+                <select asp-for="SelectStudent" asp-items="StudentNamePicker"></select>
+
+            </div>*@
+
+           @* <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @if (!string.IsNullOrEmpty(ErrorMsg))
+            {
+                <div class="alert alert-danger">@ErrorMsg</div>
+            }*@
+            <div class="form-group">
+                <label asp-for="SelectStudent" class="control-label">Student Name</label>
+                <input asp-for="SelectStudent" class="form-control" />
+                <span asp-validation-for="SelectStudent" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SelectCourses" class="control-label">Course Title</label>
+                <input asp-for="SelectCourses" class="form-control" />
+                <span asp-validation-for="SelectCourses" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Date" class="control-label"></label>
+                <input asp-for="Date" class="form-control" />
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="isPresent" /> @Html.DisplayNameFor(model => model.isPresent)
+                </label>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
