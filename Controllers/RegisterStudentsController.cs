@@ -10,7 +10,7 @@ using Student_Attendance_System.Models;
 
 namespace Student_Attendance_System.Controllers
 {
-    [Authorize(Policy = "LoggedInPolicy")]
+    
     public class RegisterStudentsController : Controller
     {
         private readonly Student_Attendance_SystemContext _context;

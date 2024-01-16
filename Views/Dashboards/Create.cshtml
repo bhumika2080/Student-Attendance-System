@@ -4,6 +4,8 @@
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var ErrorMsg = ViewBag.ErrorMsg as string;
+    var studentData = (List<SelectListItem>)ViewData["StudentData"];
+    var data = 8;
 }
 
 <h1>Add New Attendance Record</h1>
@@ -24,6 +26,9 @@
             {
                 <div class="alert alert-danger">@ErrorMsg</div>
             }*@
+            <select asp-for="SelectStudent" asp-items="studentData">
+                <option value=""></option>
+            </select>
             <div class="form-group">
                 <label asp-for="SelectStudent" class="control-label">Student Name</label>
                 <input asp-for="SelectStudent" class="form-control" />

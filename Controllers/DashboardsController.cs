@@ -11,7 +11,7 @@ using Student_Attendance_System.Models;
 
 namespace Student_Attendance_System.Controllers
 {
-    [Authorize(Policy ="LoggedInPolicy")]
+   
     public class DashboardsController : Controller
     {
         private readonly Student_Attendance_SystemContext _context;
@@ -48,13 +48,33 @@ namespace Student_Attendance_System.Controllers
         }
 
         // GET: Dashboards/Create
-        public IActionResult Create()
+        public async Task<IActionResult>  Create()
         {
-           /* var dataFromDatabase = _context.Dashboard.Select(item => item.SelectStudent).ToList();
+            var getStudentData = await _context.RegisterStudent.ToListAsync();
+            List<SelectListItem> items = new List<SelectListItem>();
+            // items = getStudentData;
+            //foreach (var da in getStudentData)
+            //{
+            //    var model = new SelectListItem();
+            //    model.Text = da.StudentName;
+            //    model.Value = da.id.ToString();
+            //    items.Add(model);
+            //}
+            foreach (var da in getStudentData)
+            {
+                items.Add(new SelectListItem
+                {
+                    Text = da.StudentName,
+                    Value = da.id.ToString()
+                });
+            }
+            ViewData["StudentData"] = items;
 
-            // Pass the data to the view
-            ViewBag.LocalData = dataFromDatabase;*/
-            
+            /* var dataFromDatabase = _context.Dashboard.Select(item => item.SelectStudent).ToList();
+
+             // Pass the data to the view
+             ViewBag.LocalData = dataFromDatabase;*/
+
 
             return View();
         }

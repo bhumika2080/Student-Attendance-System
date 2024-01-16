@@ -71,7 +71,7 @@ return View(login);
         // POST: Logins/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult LoginsView(Login login)
+        public IActionResult LoginsView(Login login/*, string returnUrl=null*/)
         {
             // Check if the provided credentials match any record in the Login table
             var user = _context.Login.FirstOrDefault(x => x.email == login.email && x.password == login.password);
@@ -80,6 +80,9 @@ return View(login);
             if (user != null)
             {
                 return RedirectToAction("Create", "RegisterStudents");
+                // Use returnUrl if provided, otherwise redirect to a default location
+                // return Redirect(returnUrl ?? Url.Action("Create", "RegisterStudents"));
+
             }
 
             // If no matching user is found, return the login view

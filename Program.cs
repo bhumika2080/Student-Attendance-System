@@ -5,20 +5,20 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<Student_Attendance_SystemContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Student_Attendance_SystemContext") ?? throw new InvalidOperationException("Connection string 'Student_Attendance_SystemContext' not found.")));
 
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-        .AddCookie(options =>
-        {
-            options.LoginPath = "/Login/LoginsView"; // Set the login path
-            options.AccessDeniedPath= "/Login/LoginsView";
-        });
+//builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+//        .AddCookie(options =>
+//        {
+//            options.LoginPath = "/Logins/LoginsView"; // Set the login path
+//            options.AccessDeniedPath= "/Logins/LoginsView";
+//        });
 
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("LoggedInPolicy", policy =>
-    {
-        policy.RequireAuthenticatedUser();
-    });
-});
+//builder.Services.AddAuthorization(options =>
+//{
+//    options.AddPolicy("LoggedInPolicy", policy =>
+//    {
+//        policy.RequireAuthenticatedUser();
+//    });
+//});
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
