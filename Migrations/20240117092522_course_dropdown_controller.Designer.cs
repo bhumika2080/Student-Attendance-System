@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Student_Attendance_System.Migrations
 {
     [DbContext(typeof(Student_Attendance_SystemContext))]
-    partial class Student_Attendance_SystemContextModelSnapshot : ModelSnapshot
+    [Migration("20240117092522_course_dropdown_controller")]
+    partial class course_dropdown_controller
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -63,23 +65,6 @@ namespace Student_Attendance_System.Migrations
                     b.HasKey("id");
 
                     b.ToTable("Dashboard");
-                });
-
-            modelBuilder.Entity("Student_Attendance_System.Models.Level", b =>
-                {
-                    b.Property<int>("LevelId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LevelId"), 1L, 1);
-
-                    b.Property<string>("LevelName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("LevelId");
-
-                    b.ToTable("Level");
                 });
 
             modelBuilder.Entity("Student_Attendance_System.Models.Login", b =>

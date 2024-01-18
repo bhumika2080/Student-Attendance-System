@@ -1,0 +1,36 @@
+﻿@model Student_Attendance_System.Models.Course
+
+<h4>Course</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        
+        <form asp-controller="RegisterStudents" asp-action="CreateCourse">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="CourseName" class="control-label"></label>
+                <input asp-for="CourseName" class="form-control" />
+                <span asp-validation-for="CourseName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        // Add logic to handle the creation of the course when the "Create Course" button is clicked
+        document.getElementById('createCourseBtn').addEventListener('click', function () {
+            // Add any additional logic to handle the creation of the course here
+            // You might want to use AJAX to send data to the server and update the view accordingly
+
+            // Hide the form after course creation
+            var createCourseForm = document.getElementById('createCourseForm');
+            createCourseForm.style.display = 'none';
+        });
+    </script>
+}

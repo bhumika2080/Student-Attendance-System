@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -47,8 +48,32 @@ namespace Student_Attendance_System.Controllers
         }
 
         // GET: RegisterStudents/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            var getCourseData = await _context.Course.ToListAsync();
+            var getLevels = await _context.Level.ToListAsync();
+            List<SelectListItem> courselist = new List<SelectListItem>();
+            List<SelectListItem> level = new List<SelectListItem>();
+            foreach (var course in getCourseData)
+            {
+                courselist.Add(new SelectListItem
+                {
+                    Text = course.CourseName,
+                    Value = course.CourseName
+                    //Value = course.CourseId.ToString()
+                });
+            }
+            foreach (var levels in getLevels)
+            {
+                level.Add(new SelectListItem
+                {
+                    Text = levels.LevelName,
+                    Value = levels.LevelName
+                    //Value = levels.LevelId.ToString()
+                });
+            }
+            ViewData["AddCourseData"]= courselist;
+            ViewData["AddLevelData"]= level;
             return View();
         }
 
@@ -154,6 +179,58 @@ namespace Student_Attendance_System.Controllers
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        // GET: Courses/Create
+        public IActionResult CreateCourse()
+        {
+            return View();
+            //return RedirectToAction("Create", "RegisterStudents");
+        }
+
+        // POST: Courses/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateCourse([Bind("CourseId,CourseName")] Course course)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(course);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Create", "RegisterStudents");
+            }
+            return View(course);
+        }
+
+        public IActionResult CreateLevel()
+        {
+            return View();
+            //return RedirectToAction("Create", "RegisterStudents");
+        }
+
+        // POST: Courses/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateLevel([Bind("LevelId,LevelName")] Level level)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(level);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Create", "RegisterStudents");
+            }
+            return View(level);
+        }
+
+        public async Task<IActionResult> ViewAndAttendance()
+        {
+            return _context.RegisterStudent != null ?
+                        View(await _context.RegisterStudent.ToListAsync()) :
+                        Problem("Entity set 'Student_Attendance_SystemContext.RegisterStudent'  is null.");
         }
 
         private bool RegisterStudentExists(int id)

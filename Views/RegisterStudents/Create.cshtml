@@ -2,46 +2,109 @@
 
 @{
     ViewData["Title"] = "Create";
+    var courseDataList = (List<SelectListItem>)ViewData["AddCourseData"];
+    var levelDataList = (List<SelectListItem>)ViewData["AddLevelData"];
 }
 
 
 <h4>Register Student</h4>
 <hr />
+
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
             <div class="form-group">
                 <label asp-for="StudentName" class="control-label"></label>
                 <input asp-for="StudentName" class="form-control" />
                 <span asp-validation-for="StudentName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Course" class="control-label"></label>
-                <input asp-for="Course" class="form-control" />
+                <label asp-for="Course" class="control-label">Course Title</label>
+                @*<input asp-for="SelectCourses" class="form-control" />*@
+                <select asp-for="Course" class="form-control" asp-items="courseDataList">
+                    <option value="">--Select Course Name--</option>
+                </select>
                 <span asp-validation-for="Course" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Level" class="control-label"></label>
-                <input asp-for="Level" class="form-control" />
+                <label asp-for="Level" class="control-label">Level</label>
+                <select asp-for="Level" class="form-control" asp-items="levelDataList">
+                    <option value="">--Select Level Name--</option>
+                </select>
                 <span asp-validation-for="Level" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="DateEnrolled" class="control-label"></label>
-                <input asp-for="DateEnrolled" class="form-control" />
+                <input asp-for="DateEnrolled" class="form-control" type="date" />
                 <span asp-validation-for="DateEnrolled" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Register Student" class="btn btn-primary" />
             </div>
+        </form>
+    </div>
+    <!-- Separate div for Add New Course button -->
+    <div class="col-md-4 row-md-18">
+        <div class="form-group">
+            <button id="toggleCreateCourse" class="btn btn-primary">Add New Course</button>
+        </div>
+        <br />
+        <div class="form-group">
+            <button id="toggleCreateLevel" class="btn btn-primary">Add New Level</button>
+        </div>
+    </div>
+    <div id="createCourseForm" class="col-md-4" style="display: none;">
+        <!-- Separate form for creating a new course -->
+        <form id="courseForm" asp-action="CreateCourse">
+            <!-- Partial view to create a new course -->
+            @await Html.PartialAsync("_CourseCreate", Model)
+        </form>
+    </div>
+    <div id="createLevelForm" class="col-md-4" style="display: none;">
+        <!-- Separate form for creating a new course -->
+        <form id="levelForm" asp-action="CreateLevel">
+            <!-- Partial view to create a new course -->
+            @await Html.PartialAsync("_CreateLevel", Model)
         </form>
     </div>
 </div>
 
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        // JavaScript logic to toggle visibility
+        document.getElementById('toggleCreateCourse').addEventListener('click', function () {
+            var createCourseForm = document.getElementById('createCourseForm');
+            createCourseForm.style.display = (createCourseForm.style.display === 'none') ? 'block' : 'none';
+        });
+        document.getElementById('toggleCreateLevel').addEventListener('click', function(){
+            var createLevelForm=document.getElementById('createLevelForm');
+            createLevelForm.style.display=(createLevelForm.style.display==='none')?'block':'none';
+        });
+    </script>
+}
+
+
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
-
+@*
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        // JavaScript logic to toggle visibility
+        document.getElementById('toggleCreateCourse').addEventListener('click', function () {
+            var createCourseForm = document.getElementById('createCourseForm');
+            createCourseForm.style.display = (createCourseForm.style.display === 'none') ? 'block' : 'none';
+        });
+    </script>
+
 }
+*@

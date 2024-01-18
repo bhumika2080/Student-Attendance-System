@@ -11,6 +11,7 @@ namespace Student_Attendance_System.Models
         public List<Course> SelectCourses { get; set; }*/
         public string SelectStudent { get; set; }
         public string SelectCourses { get; set; }
+
         public bool isPresent { get; set; }
        /* public StudentName snp { get; set; }
         public Course course { get; set; }*/

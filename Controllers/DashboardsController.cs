@@ -50,8 +50,12 @@ namespace Student_Attendance_System.Controllers
         // GET: Dashboards/Create
         public async Task<IActionResult>  Create()
         {
+            // yesle RegisterStudent table ko sab data lai list ma rakhxa
             var getStudentData = await _context.RegisterStudent.ToListAsync();
+
+            // yo chai dotnet ko default ho, SelectListItem vanne class ma janxa
             List<SelectListItem> items = new List<SelectListItem>();
+            List<SelectListItem> courseitems = new List<SelectListItem>();
             // items = getStudentData;
             //foreach (var da in getStudentData)
             //{
@@ -60,15 +64,28 @@ namespace Student_Attendance_System.Controllers
             //    model.Value = da.id.ToString();
             //    items.Add(model);
             //}
+
+
+            // getStudentData le list return garxa ani items le list<selectlistitem> return garxa,
+            // tei vara for each garera garnu parxa, sidhai items.Add() garera garna mildaina
             foreach (var da in getStudentData)
             {
                 items.Add(new SelectListItem
                 {
                     Text = da.StudentName,
-                    Value = da.id.ToString()
+                   // Value = da.id.ToString()
+                   Value=da.StudentName
+                });
+                courseitems.Add(new SelectListItem
+                {
+                    Text=da.Course,
+                    Value=da.Course
+
                 });
             }
+
             ViewData["StudentData"] = items;
+            ViewData["CourseData"] = courseitems;
 
             /* var dataFromDatabase = _context.Dashboard.Select(item => item.SelectStudent).ToList();
 
@@ -109,20 +126,21 @@ namespace Student_Attendance_System.Controllers
             if (ModelState.IsValid)
             {
                 // Check if the selected student and course exist in the RegisterStudents database
-                var studentExists = _context.RegisterStudent
+                /*var studentExists = _context.RegisterStudent
                     .Any(a => a.StudentName.ToUpper() == dashboard.SelectStudent.ToUpper() &&
                     a.Course.ToUpper() == dashboard.SelectCourses.ToUpper());
 
                 if (studentExists)
-                {
+                {*/
                     // If the student exists, add the dashboard to the database
                     _context.Add(dashboard);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
-                }
+               /* }*/
 
                 // If the student does not exist, show an error message
-                ViewBag.ErrorMsg = "Please enter a valid Student Name and Course";
+                //ViewBag.ErrorMsg = "Please enter a valid Student Name and Course";
+                ModelState.AddModelError(string.Empty, "Please enter a valid Student Name and Course");
             }
 
             return View(dashboard);
