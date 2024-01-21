@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Student_Attendance_System.Migrations
 {
     [DbContext(typeof(Student_Attendance_SystemContext))]
-    partial class Student_Attendance_SystemContextModelSnapshot : ModelSnapshot
+    [Migration("20240119075606_attendanceDataModelMade_LetsSee")]
+    partial class attendanceDataModelMade_LetsSee
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,38 +23,38 @@ namespace Student_Attendance_System.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("Student_Attendance_System.Models.AttendanceViewModel", b =>
+            modelBuilder.Entity("Student_Attendance_System.Models.AttendanceData", b =>
                 {
-                    b.Property<int>("AttendanceId")
+                    b.Property<int>("AttendanceDataId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AttendanceId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AttendanceDataId"), 1L, 1);
 
-                    b.Property<string>("Course")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("DateOfAttendance")
+                    b.Property<DateTime>("AttendanceDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Level")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("MarkAttendance")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("StudentId")
+                    b.Property<int>("CourseID")
                         .HasColumnType("int");
 
-                    b.Property<string>("StudentName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("IsPresentToday")
+                        .HasColumnType("bit");
 
-                    b.HasKey("AttendanceId");
+                    b.Property<int>("LevelID")
+                        .HasColumnType("int");
 
-                    b.ToTable("AttendanceViewModel");
+                    b.Property<int>("StudentID")
+                        .HasColumnType("int");
+
+                    b.HasKey("AttendanceDataId");
+
+                    b.HasIndex("CourseID");
+
+                    b.HasIndex("LevelID");
+
+                    b.HasIndex("StudentID");
+
+                    b.ToTable("AttendanceData");
                 });
 
             modelBuilder.Entity("Student_Attendance_System.Models.Course", b =>
@@ -163,6 +165,33 @@ namespace Student_Attendance_System.Migrations
                     b.HasKey("id");
 
                     b.ToTable("RegisterStudent");
+                });
+
+            modelBuilder.Entity("Student_Attendance_System.Models.AttendanceData", b =>
+                {
+                    b.HasOne("Student_Attendance_System.Models.Course", "Course")
+                        .WithMany()
+                        .HasForeignKey("CourseID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Student_Attendance_System.Models.Level", "Level")
+                        .WithMany()
+                        .HasForeignKey("LevelID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Student_Attendance_System.Models.RegisterStudent", "RegisterStudent")
+                        .WithMany()
+                        .HasForeignKey("StudentID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("Level");
+
+                    b.Navigation("RegisterStudent");
                 });
 #pragma warning restore 612, 618
         }

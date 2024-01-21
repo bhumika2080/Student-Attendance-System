@@ -1,54 +1,152 @@
-﻿@model IEnumerable<Student_Attendance_System.Models.RegisterStudent>
+﻿@*@model IEnumerable<Student_Attendance_System.Models.RegisterStudent>
 
-@{
-    ViewData["Title"] = "ViewAndAttendance";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
 
-<h1>ViewAndAttendance</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
+
+
+<h2 class="mb-4">Student Dashboard</h2>
+
+<form asp-action="Dashboard" method="get" class="mb-4">
+    <div class="row">
+       <div class="col-md-4">
+            <label for="subjectFilter">Filter by Subject:</label>
+            <input type="text" name="subjectFilter" value="@ViewBag.ViewSubjectFilter" class="form-control" />
+        </div>
+        <div class="col-md-4">
+            <label for="levelFilter">Filter by Level:</label>
+            <input type="text" name="levelFilter" value="@ViewBag.ViewLevelFilter" class="form-control" />
+        </div>
+
+        <div class="col-md-4">
+            <button type="submit" class="btn btn-primary mt-4">Apply Filters</button>
+        </div>
+    </div>
+</form>
+
+<table class="table table-bordered">
+    <thead class="thead-dark">
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.StudentName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Course)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Level)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateEnrolled)
-            </th>
-            <th></th>
+            <th>Student Name</th>
+            <th>Subject</th>
+            <th>Level</th>
+            <th>Attendance Status</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.StudentName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Course)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Level)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateEnrolled)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var student in Model)
+        {
+            <tr>
+                <td>@student.StudentName</td>
+                <td>@student.Course</td>
+                <td>@student.Level</td>
+                <td>
+                    <input type="checkbox" name="attendance" id="attendance_@item.id" @(item.isPresent ? "checked" : "") onclick="updateAttendance(@item.id)" />
+                </td>
+                
+            </tr>
+        }
     </tbody>
 </table>
+
+
+
+
+@section Scripts {
+    <script>
+        function updateAttendance(id) {
+            // You can use JavaScript to handle the checkbox click event
+            var checkbox = document.getElementById("attendance_" + id);
+            var isChecked = checkbox.checked;
+
+            // Send an AJAX request to update the attendance in the server-side (you need to implement this endpoint)
+            // Example using jQuery:
+            $.ajax({
+                type: "POST",
+                url: "/Attendance/UpdateAttendance",
+                data: { id: id, isChecked: isChecked },
+                success: function (data) {
+                    // Handle success if needed
+                },
+                error: function () {
+                    // Handle error if needed
+                }
+            });
+        }
+    </script>
+}*@
+
+
+@model IEnumerable<Student_Attendance_System.Models.RegisterStudent>
+
+<h2 class="mb-4">Student Dashboard</h2>
+<h4>Today's Date: @DateTime.Now.ToString("yyyy-MM-dd")</h4>
+
+<form asp-action="Dashboard" method="get" class="mb-4">
+    <div class="row">
+        <div class="col-md-4">
+            <label for="subjectFilter">Filter by Subject:</label>
+            <input type="text" name="subjectFilter" value="@ViewBag.ViewSubjectFilter" class="form-control" />
+        </div>
+        <div class="col-md-4">
+            <label for="levelFilter">Filter by Level:</label>
+            <input type="text" name="levelFilter" value="@ViewBag.ViewLevelFilter" class="form-control" />
+        </div>
+
+        <div class="col-md-4">
+            <button type="submit" class="btn btn-primary mt-4">Apply Filters</button>
+        </div>
+    </div>
+</form>
+
+<table class="table table-bordered">
+    <thead class="thead-dark">
+        <tr>
+            <th>Student Name</th>
+            <th>Subject</th>
+            <th>Level</th>
+            <th>Attendance Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var student in Model)
+        {
+           // var isPresent = true; // Replace with the actual method or logic to determine the attendance status
+
+            <tr>
+                <td>@student.StudentName</td>
+                <td>@student.Course</td>
+                <td>@student.Level</td>
+                @*<td>
+                    <input type="checkbox" name="attendance" id="attendance_@student.id" @(student.isPresent ? "checked" : "") onclick="updateAttendance(@student.id)" />
+                </td>*@
+                <td>
+                    <input type="checkbox" name="attendance" id="attendance_@student.id" checked onclick="updateAttendance(@student.id)" />
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@*@section Scripts {
+    <script>
+        function updateAttendance(id) {
+            // You can use JavaScript to handle the checkbox click event
+            var checkbox = document.getElementById("attendance_" + id);
+            var isChecked = checkbox.checked;
+
+            // Send an AJAX request to update the attendance in the server-side (you need to implement this endpoint)
+            // Example using jQuery:
+            $.ajax({
+                type: "POST",
+                url: "/Attendance/UpdateAttendance",
+                data: { id: id, isChecked: isChecked },
+                success: function (data) {
+                    // Handle success if needed
+                },
+                error: function () {
+                    // Handle error if needed
+                }
+            });
+        }
+    </script>
+}*@

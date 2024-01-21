@@ -21,4 +21,9 @@ using Student_Attendance_System.Models;
         public DbSet<Student_Attendance_System.Models.Course>? Course { get; set; }
 
         public DbSet<Student_Attendance_System.Models.Level>? Level { get; set; }
+
+       /* public DbSet<Student_Attendance_System.Models.AttendanceData>? AttendanceData { get; set; }*/
+
+        public DbSet<Student_Attendance_System.Models.AttendanceViewModel>? AttendanceViewModel { get; set; }
+
 }

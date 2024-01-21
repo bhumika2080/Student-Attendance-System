@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Student_Attendance_System.Migrations
 {
     [DbContext(typeof(Student_Attendance_SystemContext))]
-    partial class Student_Attendance_SystemContextModelSnapshot : ModelSnapshot
+    [Migration("20240120163721_isThisFinalIsMySufferingOver")]
+    partial class isThisFinalIsMySufferingOver
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -20,6 +22,40 @@ namespace Student_Attendance_System.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("Student_Attendance_System.Models.AttendanceData", b =>
+                {
+                    b.Property<int>("AttendanceDataId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AttendanceDataId"), 1L, 1);
+
+                    b.Property<DateTime>("AttendanceDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CourseName")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsPresentToday")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("LevelName")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StudentName")
+                        .HasColumnType("int");
+
+                    b.HasKey("AttendanceDataId");
+
+                    b.HasIndex("CourseName");
+
+                    b.HasIndex("LevelName");
+
+                    b.HasIndex("StudentName");
+
+                    b.ToTable("AttendanceData");
+                });
 
             modelBuilder.Entity("Student_Attendance_System.Models.AttendanceViewModel", b =>
                 {
@@ -163,6 +199,33 @@ namespace Student_Attendance_System.Migrations
                     b.HasKey("id");
 
                     b.ToTable("RegisterStudent");
+                });
+
+            modelBuilder.Entity("Student_Attendance_System.Models.AttendanceData", b =>
+                {
+                    b.HasOne("Student_Attendance_System.Models.Course", "Course")
+                        .WithMany()
+                        .HasForeignKey("CourseName")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Student_Attendance_System.Models.Level", "Level")
+                        .WithMany()
+                        .HasForeignKey("LevelName")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Student_Attendance_System.Models.RegisterStudent", "RegisterStudent")
+                        .WithMany()
+                        .HasForeignKey("StudentName")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("Level");
+
+                    b.Navigation("RegisterStudent");
                 });
 #pragma warning restore 612, 618
         }

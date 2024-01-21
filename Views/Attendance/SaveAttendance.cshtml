@@ -1,0 +1,40 @@
+﻿
+@*@{
+    ViewData["Title"] = "SaveAttendance";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>SaveAttendance</h1>*@
+
+
+@model List<RegisterStudent>
+@{
+    ViewData["Title"] = "Attendance Index";
+}
+
+<h2>Attendance Index</h2>
+
+@using (Html.BeginForm("SaveAttendance", "Attendance", FormMethod.Post))
+{
+    <table>
+        <tr>
+            <th>Student Name</th>
+            <th>Course</th>
+            <th>Level</th>
+            <th>Date</th>
+            <th>Present</th>
+        </tr>
+        @foreach (var student in Model)
+        {
+            <tr>
+                <td>@student.StudentName</td>
+                <td>@student.Course</td>
+                <td>@student.Level</td>
+                <td><input type="date" name="attendanceList[@student.id].Date" /></td>
+                <td><input type="checkbox" name="attendanceList[@student.id].IsPresent" /></td>
+            </tr>
+        }
+    </table>
+
+    <input type="submit" value="Save Attendance" />
+}
