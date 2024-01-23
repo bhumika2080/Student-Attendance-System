@@ -1,41 +1,140 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h1>Index</h1>
-@*
+
 @model List<RegisterStudent>
 
 @{
     ViewData["Title"] = "Attendance Index";
 }
 
+<script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
 <h2>Attendance Index</h2>
 
-@using (Html.BeginForm("SaveAttendance", "Attendance", FormMethod.Post))
-{
-    <table>
-        <tr>
-            <th>Student Name</th>
-            <th>Course</th>
-            <th>Level</th>
-            <th>Date</th>
-            <th>Present</th>
-        </tr>
-        @foreach (var student in Model)
-        {
-            <tr>
-                <td>@student.StudentName</td>
-                <td>@student.Course</td>
-                <td>@student.Level</td>
-                <td><input type="date" name="attendanceList[@student.id].Date" /></td>
-                <td><input type="checkbox" name="attendanceList[@student.id].IsPresent" /></td>
-            </tr>
-        }
-    </table>
 
-    <input type="submit" value="Save Attendance" />
-}
-*@
+<table id="tblUserAuthList" class="table table-responsive table-condensed table-fixedheader table-hover" style="table-layout:fixed; width:fit-content; white-space: nowrap; max-height: 500px; margin-top: 10px;">
+    <thead>
+
+        <tr>
+            <th style="color:white;">
+                @Html.DisplayNameFor(model => model.ElementAt(0).StudentName)
+            </th>
+            <th style="color:white;">
+                @Html.DisplayNameFor(model => model.ElementAt(0).Course)
+            </th>
+            <th style="color:white;">
+                @Html.DisplayNameFor(model => model.ElementAt(0).Level)
+            </th>
+          @*  <th style="color:white;">
+                @Html.DisplayNameFor(model => model.ElementAt(0).DateOfAttendance)
+            </th>
+            <th style="color:white;">
+                @Html.DisplayNameFor(model => model.ElementAt(0).MarkAttendance)
+            </th>*@
+            @*  <th style="color:white;">
+            @Html.DisplayNameFor(model => model.ElementAt(0).Module_Name)
+            </th>
+            <th style="color:white;">
+            @Html.DisplayNameFor(model => model.ElementAt(0).IsAccess)
+            </th>
+            <th style="color:white;">
+            @Html.DisplayNameFor(model => model.ElementAt(0).IsCreate)
+            </th>
+            <th style="color:white;">
+            @Html.DisplayNameFor(model => model.ElementAt(0).IsEdit)
+            </th>
+            <th style="color:white;">
+            @Html.DisplayNameFor(model => model.ElementAt(0).IsDelete)
+            </th>
+            <th style="color:white;">
+            @Html.DisplayNameFor(model => model.ElementAt(0).IsView)
+            </th>
+            <th style="color:white;">
+            @Html.DisplayNameFor(model => model.ElementAt(0).IsReport)
+            </th>*@
+        </tr>
+    </thead>
+    <tbody style="background-color: white;">
+        @{
+
+            if (Model != null && Model.Count() > 0)
+            {
+
+                @for (int i = 0; i < Model.Count(); i++)
+                {
+                    <tr>
+                        <td style="color:black;">
+                            @Html.DisplayFor(item => item.ElementAt(i).StudentName)
+                            @Html.HiddenFor(x => x.ElementAt(i).StudentName)
+                        </td>
+                        <td style="color:black;">
+                            @Html.DisplayFor(item => item.ElementAt(i).Course)
+                            @Html.HiddenFor(x => x.ElementAt(i).Course)
+                        </td>
+                        <td style="color:black;">
+                            @Html.DisplayFor(item => item.ElementAt(i).Level)
+                            @Html.HiddenFor(x => x.ElementAt(i).Level)
+                        </td>
+                       
+
+                    </tr>
+                }
+            }
+        }
+
+    </tbody>
+</table>
+
+<input type="button" value="Save" onclick="Save()" />
+
+
+<script type="text/javascript">
+    function Save() {
+        
+
+        var tableData = [];
+        $("#tblUserAuthList tr:not(:first)").each(function () {
+            //$('#tblUserAuthDV table tr').each(function () {
+            var row = $(this);
+            var data = {
+                StudentName: row.find('input[name="StudentName"]').val(),
+                Course: row.find('input[name="Course"]').val(),
+                Level: row.find('input[name="Level"]').val(),
+              
+            };
+            tableData.push(data);
+        });
+        var result = JSON.stringify(tableData);
+
+        $.ajax({
+            url: '/attendance/index',
+            type: 'POST',
+            cache: false,
+            data: result, //JSON.stringify({Model : formData}),
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                // Handle the success response if needed
+            },
+            error: function (xhr, status, error) {
+                console.log(formData);
+                alert(xhr, status, error);
+                // Handle the error if needed
+            }
+        });
+
+        //$.ajax({
+        //    type: 'POST',
+        //    url: '/attendance/index',
+        //    data: tableData.serialize(),
+        //    success: function (data) {
+        //        alert(data);
+        //        $('.tampil_vr').text(data);
+        //    }
+        //});
+    }
+    
+</script>
+

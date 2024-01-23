@@ -230,53 +230,6 @@ namespace Student_Attendance_System.Controllers
             return View(level);
         }
 
-        /* public async Task<IActionResult> ViewAndAttendance(string subjectFilter, string levelFilter*//*, string dateFilter*//*)
-          {
-              *//*return _context.RegisterStudent != null ?
-                          View(await _context.RegisterStudent.ToListAsync()) :
-                          Problem("Entity set 'Student_Attendance_SystemContext.RegisterStudent'  is null.");*//*
-              var registeredStudents = _context.RegisterStudent.AsQueryable();
-              if (!string.IsNullOrEmpty(subjectFilter))
-              {
-                  registeredStudents = registeredStudents.Where(s => s.Course == subjectFilter);
-              }
-              if (!string.IsNullOrEmpty(levelFilter))
-              {
-                  registeredStudents = registeredStudents.Where(s => s.Level == levelFilter);
-              }
-              ViewBag.ViewSubjectFilter = subjectFilter;
-              ViewBag.ViewLevelFilter = levelFilter;
-              return View(registeredStudents.ToList());
-          }*/
-
-
-        public async Task<IActionResult> ViewAndAttendance(string subjectFilter, string levelFilter)
-        {
-            var registeredStudents = _context.RegisterStudent.AsQueryable();
-
-            // Filter by Subject
-            if (!string.IsNullOrEmpty(subjectFilter))
-            {
-                registeredStudents = registeredStudents.Where(s => s.Course == subjectFilter);
-            }
-
-            // Filter by Level
-            if (!string.IsNullOrEmpty(levelFilter))
-            {
-                registeredStudents = registeredStudents.Where(s => s.Level == levelFilter);
-            }
-
-            // Populate dropdown values in ViewBag for the next request
-            ViewBag.Subjects = await _context.Course.Select(c => c.CourseName).ToListAsync() ?? new List<string>();
-            ViewBag.Levels = await _context.Level.Select(l => l.LevelName).ToListAsync() ?? new List<string>();
-
-            ViewBag.ViewSubjectFilter = subjectFilter;
-            ViewBag.ViewLevelFilter = levelFilter;
-
-            return View(registeredStudents.ToList());
-        }
-
-
 
         private bool RegisterStudentExists(int id)
         {
